@@ -1,7 +1,7 @@
 # https://doc.qt.io/qt-6/qtquick3d-index.html
 # https://www.jetbrains.com/help/clion/qt-tutorial.html#troubleshooting
 # https://www.qt.io/product/qt6/qml-book/ch12-qtquick3d-assets
-
+# https://www.qcustomplot.com/index.php/tutorials/specialcases/axistags
 
 cmake_minimum_required(VERSION 3.16)
 project(TwoSections)

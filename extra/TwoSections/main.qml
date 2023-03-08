@@ -32,21 +32,16 @@ Window {
         state: "mobileHorizontal"
         topPadding: 50
         width: 800
-        x: 219
-        y: 49
+        x: 0
+        y: 120
 
         View3D {
             anchors.fill: parent
+            anchors.rightMargin: 0
+            anchors.bottomMargin: 0
+            anchors.leftMargin: 0
+            anchors.topMargin: 0
             camera: camera
-
-            Button {
-                id: button1
-                height: 31
-                text: "Hello"
-                width: 85
-                x: 100
-                y: 179
-            }
             Node {
                 id: scene
                 PointLight {
@@ -81,16 +76,41 @@ Window {
                 source: "duck.mesh"
 
                 PropertyAnimation on eulerRotation.y  {
-                    duration: 5000
+                    running: true
+                    duration: 500
                     from: -360
                     loops: Animation.Infinite
                     to: 0
                 }
+                PropertyAnimation on eulerRotation.x  {
+                    running: true
+                    duration: 500
+                    from: 360
+                    loops: Animation.Infinite
+                    to: 0
+                }
                 materials: [
-                    DefaultMaterial {
-                        diffuseColor: "red"
-                        objectName: "test"
-                    }
+                    greenColor
+                ]
+            }
+            Model {
+                position: Qt.vector3d(0, 350, 0)
+                scale: Qt.vector3d(150, 150, 150)
+                source: "duck.mesh"
+
+                PropertyAnimation on eulerRotation.y  {
+                    running: true
+                    duration: 5000
+                    from: 360
+                    loops: Animation.Infinite
+                    to: 0
+                }
+                materials: [
+                    eyes_material,
+                    body_material,
+                    beack_material,
+                    hat1_material,
+                    hat2_material
                 ]
             }
             Text {
@@ -99,29 +119,113 @@ Window {
                 height: 49
                 text: qsTr("So this is the text")
                 width: 119
-                x: 313
-                y: 257
-            }
-            Slider {
-                id: slider
-                height: 0
-                value: 0.5
-                width: 251
-                x: 100
-                y: 83
+                x: 304
+                y: 330
             }
             LabelSlider {
                 id: labelSlider
-                x: 300
-                y: 150
+                x: 99
+                y: 94
             }
         }
     }
     Item {
         id: __materialLibrary__
         DefaultMaterial {
+            id: redColor
             diffuseColor: "red"
-            objectName: ""
+            objectName: "Red"
+        }
+
+        DefaultMaterial {
+            id: greenColor
+            diffuseColor: "#4aee45"
+            objectName: "Green"
+        }
+        DefaultMaterial {
+            id: eyes_material
+            diffuseColor: "#ff000000"
+        }
+        DefaultMaterial {
+            id: body_material
+            diffuseColor: "#ffff9001"
+        }
+        DefaultMaterial {
+            id: beack_material
+            diffuseColor: "#ffcc0800"
+        }
+        DefaultMaterial {
+            id: hat1_material
+            diffuseColor: "#ff2c00cc"
+        }
+        DefaultMaterial {
+            id: hat2_material
+            diffuseColor: "#ffcc5500"
         }
     }
+
+    Item {
+        id: __animationLibrary__
+
+    }
+
+    Text {
+        id: text2
+        x: 31
+        y: 29
+        text: qsTr("Text")
+        font.pixelSize: 12
+    }
+
+    Button {
+        id: button1
+        height: 31
+        text: "Hello"
+        width: 85
+        x: 142
+        y: 34
+    }
+
+    View3D {
+        id: view3D
+        x: 880
+        y: 320
+        width: 400
+        height: 400
+        SceneEnvironment {
+            id: sceneEnvironment
+            antialiasingMode: SceneEnvironment.MSAA
+            antialiasingQuality: SceneEnvironment.High
+        }
+
+        Node {
+            id: scene1
+            DirectionalLight {
+                id: directionalLight
+            }
+
+            PerspectiveCamera {
+                id: sceneCamera
+                z: 350
+            }
+
+            Model {
+                id: cubeModel
+                source: "#Cube"
+                materials: redColor
+                eulerRotation.y: 45
+                eulerRotation.x: 30
+
+                PropertyAnimation on eulerRotation.y  {
+                    running: true
+                    duration: 5000
+                    from: -360
+                    loops: Animation.Infinite
+                    to: 0
+                }
+            }
+        }
+        environment: sceneEnvironment
+    }
+
 }

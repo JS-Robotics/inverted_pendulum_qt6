@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>duck.mesh</file>
+        <file>LabelSlider.ui.qml</file>
+    </qresource>
+</RCC>

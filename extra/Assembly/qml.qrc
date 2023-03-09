@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>meshes/meshes/base.mesh</file>
+        <file>meshes/meshes/cart.mesh</file>
+        <file>meshes/meshes/pendulum.mesh</file>
+    </qresource>
+</RCC>

@@ -1,7 +1,7 @@
 # https://doc.qt.io/qt-6/qtquick3d-index.html
 # https://www.jetbrains.com/help/clion/qt-tutorial.html#troubleshooting
 
-cmake_minimum_required(VERSION 3.23)
+cmake_minimum_required(VERSION 3.16)
 project(inverted_pendulum_simulation)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -9,8 +9,13 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-set(CMAKE_PREFIX_PATH "C:/Qt/6.4.2/mingw_64")
+if (WIN32)
+    set(CMAKE_PREFIX_PATH "C:/Qt/6.4.2/mingw_64")
+endif ()
 
+if (UNIX)
+    set(CMAKE_PREFIX_PATH "$ENV{HOME}/Qt/6.4.2/gcc_64/lib/cmake/Qt6")
+endif ()
 
 find_package(Qt6 COMPONENTS
         Core
@@ -20,7 +25,7 @@ find_package(Qt6 COMPONENTS
         REQUIRED)
 
 add_executable(inverted_pendulum_simulation main.cpp
-#        qml.qrc
+                qml.qrc
         )
 
 set_target_properties(inverted_pendulum_simulation PROPERTIES

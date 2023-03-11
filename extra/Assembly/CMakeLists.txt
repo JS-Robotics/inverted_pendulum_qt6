@@ -2,6 +2,7 @@
 # https://www.jetbrains.com/help/clion/qt-tutorial.html#troubleshooting
 # https://www.qt.io/product/qt6/qml-book/ch12-qtquick3d-assets
 # In Blender use Y-up and Z-forward to align with Qt when models are imported
+# https://doc.qt.io/qt-5/qtqml-cppintegration-topic.html
 
 cmake_minimum_required(VERSION 3.16)
 project(Assembly)
@@ -13,6 +14,10 @@ set(CMAKE_AUTOUIC ON)
 
 if (WIN32)
     set(CMAKE_PREFIX_PATH "C:/Qt/6.4.2/mingw_64")
+endif ()
+
+if (LINUX)
+    set(CMAKE_PREFIX_PATH "$ENV{HOME}/Qt/6.4.2/gcc_64/lib/cmake/Qt6")
 endif ()
 
 find_package(Qt6 COMPONENTS

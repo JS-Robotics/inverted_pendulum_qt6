@@ -1,2 +1,3 @@
 # Project exclude paths
-/extra/TwoSections/cmake-build-debug/
+#/extra/TwoSections/cmake-build-debug/
+/extra/*/cmake-build-debug/

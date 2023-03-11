@@ -15,6 +15,10 @@ if (WIN32)
     set(CMAKE_PREFIX_PATH "C:/Qt/6.4.2/mingw_64")
 endif ()
 
+if (UNIX)
+    set(CMAKE_PREFIX_PATH "$ENV{HOME}/Qt/6.4.2/gcc_64/lib/cmake/Qt6")
+endif ()
+
 find_package(Qt6 COMPONENTS
         Core
         Gui

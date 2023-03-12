@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
   QGuiApplication app(argc, argv);
 
   QSurfaceFormat::setDefaultFormat(QQuick3D::idealSurfaceFormat(4));
-
+  std::cout << "HGelloe" << std::endl;
   QQmlApplicationEngine engine;
   engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
   if (engine.rootObjects().isEmpty()){

@@ -27,9 +27,9 @@ Window {
 
         bottomPadding: 50
         // height: 600
-        height: 800
+        height: 600
         // width: 800
-        width: 1200
+        width: 628
         leftPadding: 60
         rightPadding: 60
         state: "mobileHorizontal"
@@ -39,11 +39,11 @@ Window {
         y: 120
 
         View3D {
-            anchors.bottomMargin: 0
+            anchors.bottomMargin: -37
             anchors.fill: parent
-            anchors.leftMargin: 0
-            anchors.rightMargin: 0
-            anchors.topMargin: 0
+            anchors.leftMargin: -52
+            anchors.rightMargin: -49
+            anchors.topMargin: -38
             camera: camera
 
             Node {
@@ -51,30 +51,37 @@ Window {
                 PointLight {
                     brightness: 1
                     quadraticFade: 0
-                    x: 760
-                    z: 770
+                    x: 100
+                    z: 700
                 }
                 DirectionalLight {
-                    eulerRotation.y: -165
-                    eulerRotation.z: 30
-                }
-                DirectionalLight {
-                    brightness: 1.0
-                    eulerRotation.x: -90
-                    eulerRotation.y: 90
-                    eulerRotation.z: -180
-                    y: 1000
+                    x: 0
+                    y: 0
+                    z: 0
+                    eulerRotation.x: -103
+                    eulerRotation.y: 0
+                    eulerRotation.z: 0
                 }
                 PerspectiveCamera {
                     id: camera
-                    z: 1250
+                    x: 0
+                    y: 41
+                    pivot.z: -173
+                    pivot.x: 0
+                    eulerRotation.z: 0
+                    eulerRotation.y: 0
+                    eulerRotation.x: 0
+                    z: 1330
                 }
             }
             Model {
+                opacity: 1
                 materials: [black_006_material, steel_005_material]
                 position: Qt.vector3d(0, -600, 0)
                 scale: Qt.vector3d(1000, 1000, 1000)
                 source: "meshes/meshes/base.mesh"
+                castsShadows: true
+                receivesReflections: false
 
                 Model {
                     // materials: black_006_material
@@ -98,8 +105,8 @@ Window {
                 height: 49
                 text: qsTr("So this is the text")
                 width: 119
-                x: 304
-                y: 330
+                x: 360
+                y: 276
             }
         }
     }

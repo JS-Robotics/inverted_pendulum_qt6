@@ -1,5 +1,8 @@
 # https://doc.qt.io/qt-6/qtquick3d-index.html
 # https://www.jetbrains.com/help/clion/qt-tutorial.html#troubleshooting
+# https://www.qt.io/product/qt6/qml-book/ch12-qtquick3d-assets
+# In Blender use Y-up and Z-forward to align with Qt when models are imported
+# https://doc.qt.io/qt-5/qtqml-cppintegration-topic.html
 
 cmake_minimum_required(VERSION 3.16)
 project(inverted_pendulum_simulation)
@@ -40,12 +43,6 @@ target_link_libraries(inverted_pendulum_simulation PUBLIC
         Qt::Quick3D
         )
 
-#qt_add_qml_module(inverted_pendulum_simulation
-#        URI Example
-#        VERSION 1.0
-#        QML_FILES main.qml
-#        NO_RESOURCE_TARGET_PATH
-#        )
 
 if (WIN32)
     set(DEBUG_SUFFIX)

@@ -1,6 +1,3 @@
-// Copyright (C) 2019 The Qt Company Ltd.
-// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR BSD-3-Clause
-
 //! [import]
 import QtQuick
 import QtQuick3D
@@ -9,76 +6,82 @@ import QtQuick3D
 Window {
     id: window
     height: 720
+    minimumHeight: 720
+    minimumWidth: 1280
+    title: qsTr("Inverted Pendulum Simulation")
     visible: true
+    color: "#3c3c3c"
+    maximumWidth: 1280
+    maximumHeight: 720
     width: 1280
 
+    Item {
+        id: __materialLibrary__
+
+        // Materials
+        DefaultMaterial {
+            id: black_material
+            diffuseColor: "#ff272727"
+        }
+        DefaultMaterial {
+            id: white_material
+            diffuseColor: "#ffd2d2d2"
+        }
+        // end of Materials
+    }
     View3D {
-        id: view
-        anchors.fill: parent
+        id: view3D
+        environment: sceneEnvironment
+        height: 720
+        width: 849
+        x: 0
+        y: 0
 
-        //! [environment]
-        environment: SceneEnvironment {
-            backgroundMode: SceneEnvironment.Color
-            clearColor: "skyblue"
+        SceneEnvironment {
+            id: sceneEnvironment
+            antialiasingMode: SceneEnvironment.MSAA
+            antialiasingQuality: SceneEnvironment.High
+            backgroundMode: SceneEnvironment.Transparent
         }
+        Node {
+            id: scene
+            DirectionalLight {
+                id: directionalLight
+                eulerRotation.y: 0
+                eulerRotation.x: 330
+                eulerRotation.z: 0
+            }
+            PerspectiveCamera {
+                id: sceneCamera
+                z: 170
+            }
+            Model {
+                id: baseModel
+                eulerRotation.x: 0
+                eulerRotation.y: 0
+                materials: [black_material, white_material]
+                position: Qt.vector3d(0, -83, 0)
+                scale: Qt.vector3d(100, 100, 100)
+                source: "imports/meshes/base.mesh"
 
-        //! [environment]
+                Model {
+                    id: cartModel
+                    materials: [black_material, white_material]
+                    source: "imports/meshes/cart.mesh"
+                    // position: Qt.vector3d(0, 0.9, 0.255363)
+                    x: 0.0
+                    y: 0.916091
+                    z: 0.072269
 
-        //! [camera]
-        PerspectiveCamera {
-            eulerRotation.x: -30
-            position: Qt.vector3d(0, 200, 300)
-        }
-        //! [camera]
-
-        //! [light]
-        DirectionalLight {
-            eulerRotation.x: -30
-            eulerRotation.y: -70
-        }
-        //! [light]
-
-        //! [objects]
-        Model {
-            position: Qt.vector3d(0, -200, 0)
-            scale: Qt.vector3d(2, 0.2, 1)
-            source: "#Cylinder"
-
-            materials: [
-                DefaultMaterial {
-                    diffuseColor: "red"
-                }
-            ]
-        }
-        Model {
-            position: Qt.vector3d(0, 150, 0)
-            source: "#Sphere"
-
-            materials: [
-                DefaultMaterial {
-                    diffuseColor: "blue"
-                }
-            ]
-
-            //! [animation]
-            SequentialAnimation on y  {
-                loops: Animation.Infinite
-
-                NumberAnimation {
-                    duration: 3000
-                    easing.type: Easing.InQuad
-                    from: 150
-                    to: -150
-                }
-                NumberAnimation {
-                    duration: 3000
-                    easing.type: Easing.OutQuad
-                    from: -150
-                    to: 150
+                    Model {
+                        id: pendulumModel
+                        materials: [black_material, white_material]
+                        position: Qt.vector3d(0, 0, 0)
+                        source: "imports/meshes/pendulum.mesh"
+                        eulerRotation.z: 0
+                    }
                 }
             }
-            //! [animation]
         }
-        //! [objects]
     }
 }

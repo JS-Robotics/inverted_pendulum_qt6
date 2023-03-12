@@ -2,6 +2,7 @@
 import QtQuick
 import QtQuick3D
 
+
 //! [import]
 Window {
     id: window
@@ -68,7 +69,6 @@ Window {
                     id: cartModel
                     materials: [black_material, white_material]
                     source: "imports/meshes/cart.mesh"
-                    // position: Qt.vector3d(0, 0.9, 0.255363)
                     x: 0.0
                     y: 0.916091
                     z: 0.072269

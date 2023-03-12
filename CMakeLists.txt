@@ -3,6 +3,8 @@
 # https://www.qt.io/product/qt6/qml-book/ch12-qtquick3d-assets
 # In Blender use Y-up and Z-forward to align with Qt when models are imported
 # https://doc.qt.io/qt-5/qtqml-cppintegration-topic.html
+# https://bcairns.medium.com/super-easy-c-multi-threaded-applications-with-qt-6-and-concurrent-a2ea23daf5e9
+# https://stackoverflow.com/questions/70054114/how-to-run-a-member-function-in-qtconcurrent-in-qt6
 
 cmake_minimum_required(VERSION 3.16)
 project(inverted_pendulum_simulation)
@@ -27,7 +29,7 @@ find_package(Qt6 COMPONENTS
         Quick3D
         REQUIRED)
 
-add_executable(inverted_pendulum_simulation main.cpp
+add_executable(inverted_pendulum_simulation main.cpp backend.cc
                 qml.qrc
         )
 
@@ -43,6 +45,7 @@ target_link_libraries(inverted_pendulum_simulation PUBLIC
         Qt::Quick3D
         )
 
+target_include_directories(inverted_pendulum_simulation PUBLIC inverted_pendulum_simulation/include)
 
 if (WIN32)
     set(DEBUG_SUFFIX)

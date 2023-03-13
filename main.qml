@@ -2,21 +2,32 @@
 import QtQuick
 import QtQuick3D
 
-
 //! [import]
 Window {
     id: window
+    color: "#3c3c3c"
     height: 720
+    maximumHeight: 720
+    maximumWidth: 1280
     minimumHeight: 720
     minimumWidth: 1280
     title: qsTr("Inverted Pendulum Simulation")
     visible: true
-    color: "#3c3c3c"
-    maximumWidth: 1280
-    maximumHeight: 720
     width: 1280
 
+    property real count: 0.0
+    property real pos: 0.0
+
+    Connections {
+        target: backend
+        onCountChanged: count = backend.getCount()
+        onPosChanged: pos = backend.getPos()
+    }
+
     Item {
+
+
+
         id: __materialLibrary__
 
         // Materials
@@ -48,8 +59,8 @@ Window {
             id: scene
             DirectionalLight {
                 id: directionalLight
-                eulerRotation.y: 0
                 eulerRotation.x: 330
+                eulerRotation.y: 0
                 eulerRotation.z: 0
             }
             PerspectiveCamera {
@@ -69,19 +80,54 @@ Window {
                     id: cartModel
                     materials: [black_material, white_material]
                     source: "imports/meshes/cart.mesh"
-                    x: 0.0
+                    x: pos
                     y: 0.916091
                     z: 0.072269
 
                     Model {
                         id: pendulumModel
+                        eulerRotation.z: count
                         materials: [black_material, white_material]
                         position: Qt.vector3d(0, 0, 0)
                         source: "imports/meshes/pendulum.mesh"
-                        eulerRotation.z: 0
                     }
                 }
             }
         }
     }
+    Column {
+        id: column
+        height: 400
+        width: 200
+        x: 1064
+        y: 11
+
+
+        Text {
+            id: angle_text
+            color: "#ffffff"
+            text: "Angle:     " + (count*0.01745329251).toFixed(3)
+            font.pixelSize: 26
+            font.styleName: "Regular"
+            font.weight: Font.Normal
+            height: 39
+            horizontalAlignment: Text.AlignLeft
+            verticalAlignment: Text.AlignTop
+            width: 200
+        }
+
+            Text {
+                id: position_text
+                width: 200
+                height: 39
+                color: "#ffffff"
+                text: "Position:  " + pos.toFixed(3)
+                font.pixelSize: 26
+                horizontalAlignment: Text.AlignLeft
+                verticalAlignment: Text.AlignTop
+                font.styleName: "Regular"
+                font.weight: Font.Normal
+            }
+
+        }
 }

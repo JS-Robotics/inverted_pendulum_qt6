@@ -5,6 +5,7 @@
 # https://doc.qt.io/qt-5/qtqml-cppintegration-topic.html
 # https://bcairns.medium.com/super-easy-c-multi-threaded-applications-with-qt-6-and-concurrent-a2ea23daf5e9
 # https://stackoverflow.com/questions/70054114/how-to-run-a-member-function-in-qtconcurrent-in-qt6
+# https://forum.qt.io/topic/54490/solved-error-trying-execute-without-qtcreator-entry-point-not-found/6
 
 cmake_minimum_required(VERSION 3.16)
 project(inverted_pendulum_simulation)

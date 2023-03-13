@@ -7,6 +7,13 @@
 BackEnd::BackEnd(QObject *parent) :
     QObject(parent)
 {
+  count_ = 0;
+  pos_ = 0;
+  timer_ = 0;
+  q_timer_ = new QTimer(this);
+  connect(q_timer_, &QTimer::timeout, this, &BackEnd::increment);
+  connect(q_timer_, &QTimer::timeout, this, &BackEnd::runPos);
+  q_timer_->start(16);
 }
 
 int BackEnd::angle()

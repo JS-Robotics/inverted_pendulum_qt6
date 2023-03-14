@@ -10,6 +10,9 @@
 #include <QTimer>
 #include <qqml.h>
 #include <cmath>
+#include <iostream>
+#include <thread>
+#include <windows.h>
 
 class BackEnd : public QObject {
  Q_OBJECT
@@ -22,6 +25,10 @@ class BackEnd : public QObject {
   explicit BackEnd(QObject *parent = nullptr);
   ~BackEnd(){
     delete q_timer_;
+    do_run = false;
+    runner->join();
+    qWarning("Joined thread");
+    delete runner;
   }
   int angle();
   void setUserName(const int &angle);
@@ -32,11 +39,30 @@ class BackEnd : public QObject {
     emit countChanged();
   }
 
-  void runPos(){
-    pos_ = static_cast<float>(0.4*sin(timer_*0.5));
-    timer_ += 17.0/1000.0;
+  void init(){
+    qInfo("Running Init");
+  }
+
+  void runPos(){  // Called at Qtimer q_timer_'s interval
+//    pos_ = static_cast<float>(0.4*sin(timer_*0.5));
+//    timer_ += 17.0/1000.0;
+    pos_ = thread_pos;
+    qInfo("timer: %f", timer_);
     emit posChanged();
   }
+
+  void task(){
+
+    std::cout << "Hello" << std::endl;
+    while(do_run){
+      thread_pos = static_cast<float>(0.4*sin(timer_*0.5));
+      timer_ += 10.0/1000.0;
+      Sleep(10.0);
+    }
+
+  }
+
+
 
   Q_INVOKABLE
   float getCount() const {return count_;}
@@ -55,6 +81,9 @@ class BackEnd : public QObject {
   float pos_;
   QTimer* q_timer_;
   double timer_;
+  std::thread *runner;
+  bool do_run = true;
+  float thread_pos;
 };
 
 #endif //INVERTED_PENDULUM_SIMULATION_BACKEND_H_

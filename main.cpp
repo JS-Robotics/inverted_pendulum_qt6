@@ -6,15 +6,20 @@
 #include <QtQuick3D/qquick3d.h>
 #include "backend.h"
 #include "iostream"
+#include "thread"
+
+void task(std::string msg){
+  std::cout << "task says: " << msg << std::endl;
+}
 
 
 int main(int argc, char *argv[])
 {
 
   QGuiApplication app(argc, argv);
-
   BackEnd back_end;
-
+  back_end.init();
+  qInfo("Back_end created");
   QSurfaceFormat::setDefaultFormat(QQuick3D::idealSurfaceFormat(4));
 //  QQmlApplicationEngine engine;
 //  engine.rootContext()->setContextProperty("backend", &back_end);

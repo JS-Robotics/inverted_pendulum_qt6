@@ -13,7 +13,8 @@ BackEnd::BackEnd(QObject *parent) :
   q_timer_ = new QTimer(this);
   connect(q_timer_, &QTimer::timeout, this, &BackEnd::increment);
   connect(q_timer_, &QTimer::timeout, this, &BackEnd::runPos);
-  q_timer_->start(16);
+  q_timer_->start(17);
+  runner = new std::thread(&BackEnd::task, this);
 }
 
 int BackEnd::angle()

@@ -13,6 +13,7 @@
 #include <iostream>
 #include <thread>
 #include <windows.h>
+#include "simulator/simulator.h"
 
 class BackEnd : public QObject {
  Q_OBJECT
@@ -29,25 +30,38 @@ class BackEnd : public QObject {
     runner->join();
     qWarning("Joined thread");
     delete runner;
+    simulator_->Stop();
+    delete simulator_;
+    simulator_ = nullptr;
   }
   int angle();
   void setUserName(const int &angle);
-  void increment() {count_+= 0.25f;
-    if (count_ >= 360.0f){
-      count_ = count_ - 360.0f;
-    }
+  void increment() {
+//    count_+= 0.25f;
+//    if (count_ >= 360.0f){
+//      count_ = count_ - 360.0f;
+//    }
     emit countChanged();
   }
 
   void init(){
     qInfo("Running Init");
+    simulator_->Start();
+  }
+
+  void stop(){
+    simulator_->Stop();
+    delete simulator_;
+    simulator_ = nullptr;
   }
 
   void runPos(){  // Called at Qtimer q_timer_'s interval
 //    pos_ = static_cast<float>(0.4*sin(timer_*0.5));
 //    timer_ += 17.0/1000.0;
-    pos_ = thread_pos;
-    qInfo("timer: %f", timer_);
+//    pos_ = thread_pos;
+//    float test = 0;
+    simulator_->GetState(pos_, count_);
+//    qInfo("timer: %f", timer_);
     emit posChanged();
   }
 
@@ -84,6 +98,7 @@ class BackEnd : public QObject {
   std::thread *runner;
   bool do_run = true;
   float thread_pos;
+  Simulator* simulator_;
 };
 
 #endif //INVERTED_PENDULUM_SIMULATION_BACKEND_H_

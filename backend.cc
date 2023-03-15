@@ -15,6 +15,8 @@ BackEnd::BackEnd(QObject *parent) :
   connect(q_timer_, &QTimer::timeout, this, &BackEnd::runPos);
   q_timer_->start(17);
   runner = new std::thread(&BackEnd::task, this);
+  simulator_ = new Simulator();
+  simulator_->Init();
 }
 
 int BackEnd::angle()

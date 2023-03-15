@@ -32,5 +32,9 @@ int main(int argc, char *argv[])
   if (engine.rootObjects().isEmpty())
     return -1;
 
+//  qInfo("Is this blocking??");
+//  qInfo("Starting simulator stopping");
+//  back_end.stop();
+
   return QGuiApplication::exec();
 }

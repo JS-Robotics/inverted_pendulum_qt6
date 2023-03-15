@@ -24,6 +24,8 @@ if (UNIX)
     set(CMAKE_PREFIX_PATH "$ENV{HOME}/Qt/6.4.2/gcc_64/lib/cmake/Qt6")
 endif ()
 
+add_subdirectory(simulator)
+
 find_package(Qt6 COMPONENTS
         Core
         Gui
@@ -34,6 +36,8 @@ find_package(Qt6 COMPONENTS
 add_executable(inverted_pendulum_simulation main.cpp backend.cc
                 qml.qrc
         )
+
+target_link_libraries(inverted_pendulum_simulation PUBLIC simulator)
 
 set_target_properties(inverted_pendulum_simulation PROPERTIES
         WIN32_EXECUTABLE TRUE

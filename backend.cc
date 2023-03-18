@@ -4,31 +4,40 @@
 
 #include "backend.h"
 
-BackEnd::BackEnd(QObject *parent) :
-    QObject(parent)
-{
-  count_ = 0;
+BackEnd::BackEnd(QObject *parent) : QObject(parent) {
   pos_ = 0;
-  timer_ = 0;
+  angle_ = 0;
+  sim_time_ = 1.0f;
   q_timer_ = new QTimer(this);
-  connect(q_timer_, &QTimer::timeout, this, &BackEnd::increment);
-  connect(q_timer_, &QTimer::timeout, this, &BackEnd::runPos);
+  connect(q_timer_, &QTimer::timeout, this, &BackEnd::getPose);
   q_timer_->start(17);
-  runner = new std::thread(&BackEnd::task, this);
   simulator_ = new Simulator();
   simulator_->Init();
 }
 
-int BackEnd::angle()
-{
-  return m_angle;
+BackEnd::~BackEnd() {
+  delete q_timer_;
+  simulator_->Stop();
+  delete simulator_;
+  simulator_ = nullptr;
 }
 
-void BackEnd::setUserName(const int &angle)
-{
-  if (angle == m_angle)
-    return;
-
-  m_angle = angle;
+void BackEnd::getPose() { // Called at Qtimer q_timer_'s interval
+  simulator_->GetState(pos_, angle_);
+  simulator_->GetStats(sim_time_, elapsed_time_);
+  sim_time_ = 1000000*sim_time_;
+  emit simChanged();
   emit angleChanged();
+  emit posChanged();
+}
+
+void BackEnd::init() {
+  qInfo("Running Init");
+  simulator_->Start();
+}
+
+void BackEnd::stop() {
+  simulator_->Stop();
+  delete simulator_;
+  simulator_ = nullptr;
 }

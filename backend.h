@@ -12,92 +12,46 @@
 #include <cmath>
 #include <iostream>
 #include <thread>
-#include <windows.h>
 #include "simulator/simulator.h"
 
 class BackEnd : public QObject {
  Q_OBJECT
-  Q_PROPERTY(float angle READ angle WRITE setUserName NOTIFY angleChanged)
+  Q_PROPERTY(float angle READ getAngle NOTIFY angleChanged)
   Q_PROPERTY(float pos READ getPos NOTIFY posChanged)
-  Q_PROPERTY(float count READ getCount NOTIFY countChanged)
+  Q_PROPERTY(float sim READ getSim NOTIFY simChanged)
   QML_ELEMENT
 
  public:
   explicit BackEnd(QObject *parent = nullptr);
-  ~BackEnd(){
-    delete q_timer_;
-    do_run = false;
-    runner->join();
-    qWarning("Joined thread");
-    delete runner;
-    simulator_->Stop();
-    delete simulator_;
-    simulator_ = nullptr;
-  }
-  int angle();
-  void setUserName(const int &angle);
-  void increment() {
-//    count_+= 0.25f;
-//    if (count_ >= 360.0f){
-//      count_ = count_ - 360.0f;
-//    }
-    emit countChanged();
-  }
+  ~BackEnd();
 
-  void init(){
-    qInfo("Running Init");
-    simulator_->Start();
-  }
+  void init();
 
-  void stop(){
-    simulator_->Stop();
-    delete simulator_;
-    simulator_ = nullptr;
-  }
+  void stop();
 
-  void runPos(){  // Called at Qtimer q_timer_'s interval
-//    pos_ = static_cast<float>(0.4*sin(timer_*0.5));
-//    timer_ += 17.0/1000.0;
-//    pos_ = thread_pos;
-//    float test = 0;
-    simulator_->GetState(pos_, count_);
-//    qInfo("timer: %f", timer_);
-    emit posChanged();
-  }
-
-  void task(){
-
-    std::cout << "Hello" << std::endl;
-    while(do_run){
-      thread_pos = static_cast<float>(0.4*sin(timer_*0.5));
-      timer_ += 10.0/1000.0;
-      Sleep(10.0);
-    }
-
-  }
-
-
+  void getPose();
 
   Q_INVOKABLE
-  float getCount() const {return count_;}
+  [[nodiscard]] float getPos() const {return pos_;}
 
   Q_INVOKABLE
-  float getPos() const {return pos_;}
+  [[nodiscard]] float getAngle() const {return angle_;}
+
+  Q_INVOKABLE
+  [[nodiscard]] float getSim() const {return sim_time_;}
 
  signals:
-  void countChanged();
+  void simChanged();
   void posChanged();
   void angleChanged();
 
  private:
-  int m_angle;
-  float count_;
   float pos_;
+  float angle_;
+  float sim_time_;
+  float elapsed_time_;
   QTimer* q_timer_;
   double timer_;
-  std::thread *runner;
-  bool do_run = true;
-  float thread_pos;
   Simulator* simulator_;
 };
 

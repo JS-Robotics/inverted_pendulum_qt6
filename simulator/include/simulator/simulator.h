@@ -22,6 +22,7 @@ class Simulator {
   void Stop();
 
   void GetState(float &position, float &Angle);
+  void GetStats(float &simulation_time, float &elapsed_time);
 
  private:
   bool thread_stop;
@@ -31,7 +32,8 @@ class Simulator {
   float time_step;
   std::chrono::time_point<std::chrono::steady_clock> time_start;
   std::chrono::time_point<std::chrono::steady_clock> time_end;
-  float time_elapsed;
+  float time_elapsed_;
+  float simulation_time_;
   std::thread* thread_;
 
 

@@ -5,6 +5,11 @@ import QtQuick3D
 //! [import]
 Window {
     id: window
+
+    property real angle: 0.0
+    property real pos: 0.0
+    property real sim: 0.0
+
     color: "#3c3c3c"
     height: 720
     maximumHeight: 720
@@ -15,19 +20,13 @@ Window {
     visible: true
     width: 1280
 
-    property real count: 0.0
-    property real pos: 0.0
-
     Connections {
         target: backend
-        onCountChanged: count = backend.getCount()
+        onAngleChanged: angle = backend.getAngle()
         onPosChanged: pos = backend.getPos()
+        onSimChanged: sim = backend.getSim()
     }
-
     Item {
-
-
-
         id: __materialLibrary__
 
         // Materials
@@ -86,7 +85,7 @@ Window {
 
                     Model {
                         id: pendulumModel
-                        eulerRotation.z: count
+                        eulerRotation.z: angle
                         materials: [black_material, white_material]
                         position: Qt.vector3d(0, 0, 0)
                         source: "imports/meshes/pendulum.mesh"
@@ -102,11 +101,22 @@ Window {
         x: 1064
         y: 11
 
-
         Text {
             id: angle_text
             color: "#ffffff"
-            text: "Angle:     " + (count*0.01745329251).toFixed(3)
+            text: "Angle:      " + (angle*0.01745329251).toFixed(3)
+            font.pixelSize: 26
+            font.styleName: "Regular"
+            font.weight: Font.Normal
+            height: 39
+            horizontalAlignment: Text.AlignLeft
+            verticalAlignment: Text.AlignTop
+            width: 200
+        }
+        Text {
+            id: position_text
+            color: "#ffffff"
+            text: "Position:   " + (pos*0.01745329251).toFixed(3)
             font.pixelSize: 26
             font.styleName: "Regular"
             font.weight: Font.Normal
@@ -116,18 +126,17 @@ Window {
             width: 200
         }
 
-            Text {
-                id: position_text
-                width: 200
-                height: 39
-                color: "#ffffff"
-                text: "Position:  " + pos.toFixed(3)
-                font.pixelSize: 26
-                horizontalAlignment: Text.AlignLeft
-                verticalAlignment: Text.AlignTop
-                font.styleName: "Regular"
-                font.weight: Font.Normal
-            }
-
+        Text {
+            id: sim_time_text
+            color: "#ffffff"
+            text: "Sim Time:  " + (sim).toFixed(2) + "[us]"
+            font.pixelSize: 26
+            font.styleName: "Regular"
+            font.weight: Font.Normal
+            height: 39
+            horizontalAlignment: Text.AlignLeft
+            verticalAlignment: Text.AlignTop
+            width: 200
         }
+    }
 }

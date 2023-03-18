@@ -14,10 +14,10 @@ Simulator::~Simulator() {
 
 bool Simulator::Init() {
   thread_stop = false;
-  time_step = 1.f / 250.f;
+  time_step = 1.f / 750.f;
   time_start = std::chrono::steady_clock::now();
   time_end = time_start;
-  time_elapsed = std::chrono::duration<float>(time_end - time_start).count();
+  time_elapsed_ = std::chrono::duration<float>(time_end - time_start).count();
   return true;
 }
 
@@ -28,7 +28,7 @@ uint32_t Simulator::Run() {
   float x = 0;
   float w_dd = 0;
   float w_d = 0;
-  float w = 0.01f;
+  float w = 3.01f;
 
   float m_p = 0.071f;
   float m_c = 0.288f;
@@ -58,11 +58,12 @@ uint32_t Simulator::Run() {
     angle_ = w;
     mutex_.unlock();
     time_end = std::chrono::steady_clock::now();
+    simulation_time_ = std::chrono::duration<float>(time_end - time_start).count();
+    time_elapsed_ = std::chrono::duration<float>(std::chrono::steady_clock::now() - time_init).count();
     float duration = std::chrono::duration<float>(time_end - time_start).count();
     if (duration < time_step) {
       std::this_thread::sleep_for(std::chrono::duration<float>(time_step - duration));
     }
-    time_elapsed = std::chrono::duration<float>(std::chrono::steady_clock::now() - time_init).count();
   }
   return 0;
 }
@@ -84,6 +85,13 @@ void Simulator::GetState(float &position, float &angle) {
   mutex_.lock();
   position = position_;
   angle = angle_*180.f/3.14159265359f;  // Convert to DEG
+  mutex_.unlock();
+}
+
+void Simulator::GetStats(float &simulation_time, float &elapsed_time){
+  mutex_.lock();
+  simulation_time = simulation_time_;
+  elapsed_time = time_elapsed_;
   mutex_.unlock();
 }
 

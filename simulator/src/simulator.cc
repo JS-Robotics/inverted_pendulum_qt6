@@ -14,7 +14,7 @@ Simulator::~Simulator() {
 
 bool Simulator::Init() {
   thread_stop = false;
-  time_step = 1.f / 100.f;
+  time_step = 1.f / 250.f;
   time_start = std::chrono::steady_clock::now();
   time_end = time_start;
   time_elapsed = std::chrono::duration<float>(time_end - time_start).count();
@@ -28,7 +28,7 @@ uint32_t Simulator::Run() {
   float x = 0;
   float w_dd = 0;
   float w_d = 0;
-  float w = 2.25f;
+  float w = 0.01f;
 
   float m_p = 0.071f;
   float m_c = 0.288f;
@@ -37,30 +37,20 @@ uint32_t Simulator::Run() {
   float g = 9.81f;
   float F_m = 0;
   float b_c = 0.0001f;//1.15f;
-  float b_p = 0.0001f;//0.35f; //1.17f;
+  float b_p = 0.0005f;//0.35f; //1.17f;
 
   while (!thread_stop) {
     time_start = std::chrono::steady_clock::now();
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    x_dd = (F_m - b_c * x_d + m_p * L_p * w_dd * cos(w) - m_p * L_p * w_d * w_d * sin(w)) / (m_p + m_c);
+    x_dd = (F_m - b_c * x_d - m_p * L_p * w_dd * cos(w) + m_p * L_p * w_d * w_d * sin(w)) / (m_p + m_c);
     x_d = x_dd * time_step + x_d;
     x = x_d * time_step + x;
 
-
-    w_dd = (m_p * L_p * g * sin(w) + m_p * L_p * x_dd * cos(w) - b_p * w_d) / (I_p + m_p * L_p * L_p);
+    w_dd = (-m_p * L_p * g * sin(w) - m_p * L_p * x_dd * cos(w) - b_p * w_d) / (I_p + m_p * L_p * L_p);
     w_d = w_dd * time_step + w_d;
     w = w_d * time_step + w;
-
-
-//    position_ = static_cast<float>(0.4f * sin(time_elapsed * 5.5));
-//    angle_ = position_;
-
-
-//    w_dd = static_cast<float>(-g/L_p * (cos(static_cast<double>(w))));
-//    w_d = w_dd * time_step + w_d;
-//    w = w + time_step * w_d;
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
     mutex_.lock();
@@ -93,8 +83,7 @@ void Simulator::Stop() {
 void Simulator::GetState(float &position, float &angle) {
   mutex_.lock();
   position = position_;
-  std::cout << "Angle: "  << angle_*180.f/3.1415692f - 180.f << std::endl;
-  angle = angle_*180.f/3.1415692f;
+  angle = angle_*180.f/3.14159265359f;  // Convert to DEG
   mutex_.unlock();
 }
 

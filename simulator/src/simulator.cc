@@ -54,8 +54,9 @@ uint32_t Simulator::Run() {
   float I_p = 0.0000005f; //0.006f;
   float g = 9.81f;
   float F_m = 0;
-  float b_c = 0.0001f;//1.15f;
-  float b_p = 0.0005f;//0.35f; //1.17f;
+  float b_c = 0.5f;//1.15f;
+//  float b_p = 0.029750138469330462f;//0.35f; //1.17f;
+  float b_p = 0.0008297f;//0.35f; //1.17f;
 
   while (!thread_stop) {
     time_start = std::chrono::steady_clock::now();

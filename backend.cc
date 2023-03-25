@@ -5,9 +5,10 @@
 #include "backend.h"
 
 BackEnd::BackEnd(QObject *parent) : QObject(parent) {
-  pos_ = 0;
-  angle_ = 0;
-  sim_time_ = 1.0f;
+  pos_ = 0.0f;
+  angle_ = 0.0f;
+  sim_time_ = 0.0f;
+  elapsed_time_ = 0.0f;
   q_timer_ = new QTimer(this);
   connect(q_timer_, &QTimer::timeout, this, &BackEnd::getPose);
   q_timer_->start(17);
@@ -29,6 +30,7 @@ void BackEnd::getPose() { // Called at Qtimer q_timer_'s interval
   emit simChanged();
   emit angleChanged();
   emit posChanged();
+  emit elapsedChanged();
 }
 
 void BackEnd::init() {

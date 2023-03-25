@@ -9,6 +9,7 @@ Window {
     property real angle: 0.0
     property real pos: 0.0
     property real sim: 0.0
+    property real elapsed: 0.0
 
     color: "#3c3c3c"
     height: 720
@@ -25,6 +26,7 @@ Window {
         onAngleChanged: angle = backend.getAngle()
         onPosChanged: pos = backend.getPos()
         onSimChanged: sim = backend.getSim()
+        onElapsedChanged: elapsed = backend.getElapsed()
     }
     Item {
         id: __materialLibrary__
@@ -98,7 +100,7 @@ Window {
         id: column
         height: 400
         width: 200
-        x: 1064
+        x: 1024
         y: 11
 
         Text {
@@ -135,6 +137,18 @@ Window {
             font.weight: Font.Normal
             height: 39
             horizontalAlignment: Text.AlignLeft
+            verticalAlignment: Text.AlignTop
+            width: 200
+        }
+        Text {
+            id: elapsed_time_text
+            color: "#ffffff"
+            font.pixelSize: 26
+            font.styleName: "Regular"
+            font.weight: Font.Normal
+            height: 39
+            horizontalAlignment: Text.AlignLeft
+            text: "Elapsed:  " + (elapsed).toFixed(2) + "[s]"
             verticalAlignment: Text.AlignTop
             width: 200
         }

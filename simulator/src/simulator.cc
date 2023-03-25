@@ -2,6 +2,8 @@
 // Created by ICraveSleep on 15-Mar-23.
 //
 
+#include <cmath>
+
 #include "simulator/simulator.h"
 
 Simulator::Simulator() {
@@ -43,28 +45,39 @@ uint32_t Simulator::Run() {
   std::chrono::steady_clock::time_point time_init = std::chrono::steady_clock::now();
   float x_dd = 0;
   float x_d = 0;
-  float x = 0;
+  float x = 0.0;
   float w_dd = 0;
   float w_d = 0;
-  float w = 3.01f;
+  float w = 0.0f; //1.57079632679f;
 
   float m_p = 0.071f;
   float m_c = 0.288f;
   float L_p = (0.685f - 0.246f);
-  float I_p = 0.0000005f; //0.006f;
+  float I_p = 0.00466;
   float g = 9.81f;
   float F_m = 0;
-  float b_c = 0.5f;//1.15f;
-//  float b_p = 0.029750138469330462f;//0.35f; //1.17f;
-  float b_p = 0.0008297f;//0.35f; //1.17f;
+  float b_c = 0.095f;
+//  float b_c = 0.545f;
+  float b_p = 0.00112297f;
 
   while (!thread_stop) {
     time_start = std::chrono::steady_clock::now();
-
+    F_m = 0.4f*static_cast<float>(std::sin(2*time_elapsed_));
 
     x_dd = (F_m - b_c * x_d - m_p * L_p * w_dd * cos(w) + m_p * L_p * w_d * w_d * sin(w)) / (m_p + m_c);
     x_d = x_dd * time_step + x_d;
     x = x_d * time_step + x;
+    if(x >= 0.40f){
+      x_dd = 0;
+      x_d = -x_d;
+      x = 0.40f;
+    }
+
+    if(x <= -0.40f){
+      x_dd = 0;
+      x_d = -x_d;
+      x = -0.40f;
+    }
 
     w_dd = (-m_p * L_p * g * sin(w) - m_p * L_p * x_dd * cos(w) - b_p * w_d) / (I_p + m_p * L_p * L_p);
     w_d = w_dd * time_step + w_d;

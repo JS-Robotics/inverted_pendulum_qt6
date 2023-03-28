@@ -25,6 +25,7 @@ if (UNIX)
 endif ()
 
 add_subdirectory(simulator)
+add_subdirectory(communication)
 
 find_package(Qt6 COMPONENTS
         Core
@@ -37,7 +38,7 @@ add_executable(inverted_pendulum_simulation main.cpp backend.cc
                 qml.qrc
         )
 
-target_link_libraries(inverted_pendulum_simulation PUBLIC simulator)
+target_link_libraries(inverted_pendulum_simulation PUBLIC simulator communication)
 
 set_target_properties(inverted_pendulum_simulation PROPERTIES
         WIN32_EXECUTABLE TRUE

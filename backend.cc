@@ -18,7 +18,7 @@ BackEnd::BackEnd(QObject *parent) : QObject(parent) {
   simulator_->Init();
 
   if (simulator_) {
-    communication_ = new Communication(simulator_);
+    communication_ = new Communication(*simulator_);
     communication_->Init();
   } else {
     std::cout << "Unable to create communication object due to simulator object being null" << std::endl;

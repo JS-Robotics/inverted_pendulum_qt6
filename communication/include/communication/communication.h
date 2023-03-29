@@ -13,7 +13,7 @@
 
 class Communication{
  public:
-  Communication();
+  Communication(Simulator* simulator);
   ~Communication();
 
   bool Init();
@@ -24,9 +24,11 @@ class Communication{
  private:
   bool thread_stop;
   std::mutex mutex_;
-  std::chrono::time_point<std::chrono::steady_clock> time_start;
-  std::chrono::time_point<std::chrono::steady_clock> time_end;
+  float time_step_;
+  std::chrono::time_point<std::chrono::steady_clock> time_start_;
+  std::chrono::time_point<std::chrono::steady_clock> time_end_;
   std::thread* thread_;
+  Simulator* simulator_;
 };
 
 #endif //INVERTED_PENDULUM_SIMULATION_COMMUNICATION_INCLUDE_COMMUNICATION_COMMUNICATION_H_

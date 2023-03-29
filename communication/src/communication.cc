@@ -4,7 +4,8 @@
 
 #include "communication/communication.h"
 
-Communication::Communication() {
+Communication::Communication(Simulator* simulator): simulator_(simulator) {
+  time_step_ = 0.0f;
   thread_ = nullptr;
   thread_stop = false;
 }
@@ -15,6 +16,9 @@ Communication::~Communication() {
 
 bool Communication::Init() {
   thread_stop = false;
+  time_step_ = 0.01f; // 10[ms]
+  time_start_ = std::chrono::steady_clock::now();
+  time_end_ = time_start_;
   return true;
 }
 
@@ -24,6 +28,19 @@ void Communication::Start() {
 
 uint32_t Communication::Run() {
   // Do message publishes
+  while(!thread_stop){
+    time_start_ = std::chrono::steady_clock::now();
+    float a;
+    float b;
+    simulator_->GetState(a, b);
+    std::cout << a << std::endl;
+    time_end_ = std::chrono::steady_clock::now();
+    float duration = std::chrono::duration<float>(time_end_ - time_start_).count();
+    if (duration < time_step_) {
+      std::this_thread::sleep_for(std::chrono::duration<float>(time_step_ - duration));
+    }
+  }
+  std::cout << "RUN STOPPING" << std::endl;
   return 0;
 }
 

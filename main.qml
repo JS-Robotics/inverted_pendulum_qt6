@@ -106,7 +106,7 @@ Window {
         Text {
             id: angle_text
             color: "#ffffff"
-            text: "Angle:      " + (angle*0.01745329251).toFixed(3)
+            text: "Angle:      " + (angle*0.01745329251).toFixed(2) + "[rad]"
             font.pixelSize: 26
             font.styleName: "Regular"
             font.weight: Font.Normal
@@ -118,7 +118,7 @@ Window {
         Text {
             id: position_text
             color: "#ffffff"
-            text: "Position:   " + (pos*0.01745329251).toFixed(3)
+            text: "Position:   " + pos.toFixed(2) + "[m]"
             font.pixelSize: 26
             font.styleName: "Regular"
             font.weight: Font.Normal
@@ -148,7 +148,7 @@ Window {
             font.weight: Font.Normal
             height: 39
             horizontalAlignment: Text.AlignLeft
-            text: "Elapsed:  " + (elapsed).toFixed(2) + "[s]"
+            text: "Elapsed:  " + (elapsed).toFixed(1) + "[s]"
             verticalAlignment: Text.AlignTop
             width: 200
         }

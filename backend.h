@@ -13,6 +13,7 @@
 #include <iostream>
 #include <thread>
 #include "simulator/simulator.h"
+#include "communication/communication.h"
 
 class BackEnd : public QObject {
  Q_OBJECT
@@ -58,6 +59,7 @@ class BackEnd : public QObject {
   QTimer* q_timer_;
   double timer_;
   Simulator* simulator_;
+  Communication* communication_;
 };
 
 #endif //INVERTED_PENDULUM_SIMULATION_BACKEND_H_

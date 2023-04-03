@@ -10,6 +10,7 @@
 #include <thread>
 #include "iostream"
 #include "simulator/simulator.h"
+#include "turns_publisher.h"
 
 class Communication{
  public:

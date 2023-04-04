@@ -19,6 +19,8 @@ bool Communication::Init() {
   time_step_ = 0.01f; // 10[ms]
   time_start_ = std::chrono::steady_clock::now();
   time_end_ = time_start_;
+  turns_publisher_.Init();
+//  turns_publisher_.Run();
   return true;
 }
 
@@ -33,7 +35,7 @@ uint32_t Communication::Run() {
     float a;
     float b;
     simulator_.GetState(a, b);
-    std::cout << a << std::endl;
+//    std::cout << a << std::endl;
     time_end_ = std::chrono::steady_clock::now();
     float duration = std::chrono::duration<float>(time_end_ - time_start_).count();
     if (duration < time_step_) {

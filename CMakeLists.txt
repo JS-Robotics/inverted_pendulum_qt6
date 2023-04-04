@@ -17,11 +17,11 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 if (WIN32)
-    set(CMAKE_PREFIX_PATH "C:/Qt/6.4.2/mingw_64")
+    set(CMAKE_PREFIX_PATH "$ENV{QT_INSTALL_PATH}/mingw_64")
 endif ()
 
 if (UNIX)
-    set(CMAKE_PREFIX_PATH "$ENV{HOME}/Qt/6.4.2/gcc_64/lib/cmake/Qt6")
+    set(CMAKE_PREFIX_PATH "$ENV{HOME}/$ENV{QT_INSTALL_PATH}/gcc_64/lib/cmake/Qt6")
 endif ()
 
 add_subdirectory(simulator)

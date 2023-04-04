@@ -19,6 +19,10 @@ class TurnsPublisher {
   TurnsPublisher();
   ~TurnsPublisher();
 
+  bool Init();
+  bool Publish();
+  void Run();
+
  private:
   std_msgs::msg::Float32 turns_message_;
   eprosima::fastdds::dds::DomainParticipant *participant_;

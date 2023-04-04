@@ -10,6 +10,7 @@
 #include <thread>
 #include "iostream"
 #include "simulator/simulator.h"
+#include "../../src/turns_publisher.h"
 
 class Communication{
  public:
@@ -29,6 +30,7 @@ class Communication{
   std::chrono::time_point<std::chrono::steady_clock> time_end_;
   std::thread* thread_;
   Simulator& simulator_;
+  TurnsPublisher turns_publisher_;
 };
 
 #endif //INVERTED_PENDULUM_SIMULATION_COMMUNICATION_INCLUDE_COMMUNICATION_COMMUNICATION_H_

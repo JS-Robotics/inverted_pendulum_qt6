@@ -12,7 +12,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 if (WIN32)
-    set(CMAKE_PREFIX_PATH "C:/Qt/6.4.2/mingw_64")
+#    set(CMAKE_PREFIX_PATH "C:/Qt/6.4.2/mingw_64")
+    set(CMAKE_PREFIX_PATH "C:/Qt/6.4.2/msvc2019_64")
 endif ()
 
 if (UNIX)

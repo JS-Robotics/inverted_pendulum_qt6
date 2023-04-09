@@ -32,12 +32,13 @@ uint32_t Communication::Run() {
   // Do message publishes
   while(!thread_stop){
     time_start_ = std::chrono::steady_clock::now();
-    float a;
+    float position;
     float b;
-    simulator_.GetState(a, b);
+    simulator_.GetState(position, b);
 //    std::cout << a << std::endl;
     time_end_ = std::chrono::steady_clock::now();
     float duration = std::chrono::duration<float>(time_end_ - time_start_).count();
+    turns_publisher_.Publish(position);
     if (duration < time_step_) {
       std::this_thread::sleep_for(std::chrono::duration<float>(time_step_ - duration));
     }

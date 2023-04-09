@@ -20,7 +20,7 @@ class TurnsPublisher {
   ~TurnsPublisher();
 
   bool Init();
-  bool Publish();
+  bool Publish(float turns);
   void Run();
 
  private:

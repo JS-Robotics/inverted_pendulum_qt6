@@ -67,14 +67,12 @@ bool TurnsPublisher::Init() {
               << std::endl; // TODO Change to use return value in order to inform about this
     return false;
   }
-
-  std::cout << "AAAAAAAAAAAAAAAAAAAAAAAaa" << std::endl;
   return true;
 }
 
-bool TurnsPublisher::Publish() {
+bool TurnsPublisher::Publish(float turns) {
   if (listener_.matched_ > 0) {
-    turns_message_.data(0.123);
+    turns_message_.data(turns);
     data_writer_->write(&turns_message_);
     return true;
   }
@@ -85,7 +83,7 @@ void TurnsPublisher::Run() {
   int Samples = 10;
   uint32_t samples_sent = 0;
   while (samples_sent < Samples) {
-    if (Publish()) {
+    if (Publish(0.01f)) {
       samples_sent++;
       std::cout << "Message: " << turns_message_.data() << " SENT" << std::endl;
     }

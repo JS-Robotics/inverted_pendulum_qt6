@@ -1,13 +1,3 @@
-# https://doc.qt.io/qt-6/qtquick3d-index.html
-# https://www.jetbrains.com/help/clion/qt-tutorial.html#troubleshooting
-# https://www.qt.io/product/qt6/qml-book/ch12-qtquick3d-assets
-# In Blender use Y-up and Z-forward to align with Qt when models are imported
-# https://doc.qt.io/qt-5/qtqml-cppintegration-topic.html
-# https://bcairns.medium.com/super-easy-c-multi-threaded-applications-with-qt-6-and-concurrent-a2ea23daf5e9
-# https://stackoverflow.com/questions/70054114/how-to-run-a-member-function-in-qtconcurrent-in-qt6
-# https://zetcode.com/gui/qt5/snake/
-# https://forum.qt.io/topic/54490/solved-error-trying-execute-without-qtcreator-entry-point-not-found/6
-
 cmake_minimum_required(VERSION 3.16)
 project(inverted_pendulum_simulation)
 
@@ -17,7 +7,9 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 if (WIN32)
-    set(CMAKE_PREFIX_PATH "$ENV{QT_INSTALL_PATH}/mingw_64")
+    #set(CMAKE_PREFIX_PATH "$ENV{QT_INSTALL_PATH}/mingw_64")  // Lost support for MinGW64 when FastDDS was added
+#    set(CMAKE_PREFIX_PATH "C:/Qt/6.4.2/msvc2019_64")
+    set(CMAKE_PREFIX_PATH "$ENV{QT_INSTALL_PATH}")
 endif ()
 
 if (UNIX)
@@ -32,6 +24,7 @@ find_package(Qt6 COMPONENTS
         Gui
         Quick
         Quick3D
+        Widgets
         REQUIRED)
 
 add_executable(inverted_pendulum_simulation main.cpp backend.cc

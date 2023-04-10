@@ -21,7 +21,6 @@ class TurnsPublisher {
 
   bool Init();
   bool Publish(float turns);
-  void Run();
 
  private:
   std_msgs::msg::Float32 turns_message_;

@@ -10,7 +10,9 @@
 #include <thread>
 #include "iostream"
 #include "simulator/simulator.h"
-#include "../../src/turns_publisher.h"
+#include "../../src/ros_publisher.h"
+#include "../../src/message_types/Float32/Float32PubSubTypes.h"
+#include "../../src/message_types/Vector3/Vector3PubSubTypes.h"
 
 class Communication{
  public:
@@ -30,7 +32,18 @@ class Communication{
   std::chrono::time_point<std::chrono::steady_clock> time_end_;
   std::thread* thread_;
   Simulator& simulator_;
-  TurnsPublisher turns_publisher_;
+
+  eprosima::fastdds::dds::DomainParticipant* participant_;
+
+
+  RosPublisher<std_msgs::msg::Float32PubSubType>* publisher_cart_position_;
+  std_msgs::msg::Float32 message_cart_position_;
+
+  RosPublisher<geometry_msgs::msg::Vector3PubSubType>* publisher_pendulum_state_;
+  geometry_msgs::msg::Vector3 message_pendulum_state;
+
+  void CleanDds();
+
 };
 
 #endif //INVERTED_PENDULUM_SIMULATION_COMMUNICATION_INCLUDE_COMMUNICATION_COMMUNICATION_H_

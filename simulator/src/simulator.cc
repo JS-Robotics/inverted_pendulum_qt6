@@ -17,7 +17,7 @@ Simulator::~Simulator() {
 
 bool Simulator::Init() {
   thread_stop = false;
-  time_step = 1.f / 500.f;
+  time_step = 1.f / 60.f;  // Only able to run 1/100 on Windows, on Linus easy able to run 1/500
   time_start = std::chrono::steady_clock::now();
   time_end = time_start;
   time_elapsed_ = std::chrono::duration<float>(time_end - time_start).count();
@@ -37,7 +37,7 @@ void Simulator::Stop() {
     std::cout << "Joined Simulator thread" << std::endl;
     delete thread_;
     thread_ = nullptr;
-    std::cout << "Stopped simulator thread" << std::endl;
+    std::cout << "Simulator thread deleted" << std::endl;
   }
 }
 
@@ -68,13 +68,13 @@ uint32_t Simulator::Run() {
     x_d = x_dd * time_step + x_d;
     x = x_d * time_step + x;
 
-    if(x >= rail_limit){
+    if (x >= rail_limit) {
       x_dd = 0;
       x_d = -x_d;
       x = rail_limit;
     }
 
-    if(x <= -rail_limit){
+    if (x <= -rail_limit) {
       x_dd = 0;
       x_d = -x_d;
       x = -rail_limit;
@@ -123,7 +123,6 @@ void Simulator::UpdateLoopAverage(float duration) {
 }
 
 void Simulator::UpdateSimulation() {
-
 
 }
 

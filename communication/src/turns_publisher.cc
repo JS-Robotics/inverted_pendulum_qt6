@@ -46,7 +46,7 @@ bool TurnsPublisher::Init() {
 
   type_support_.register_type(participant_);
   topic_ =
-      participant_->create_topic("rt/ivp/turns", type_support_->getName(), eprosima::fastdds::dds::TOPIC_QOS_DEFAULT);
+      participant_->create_topic("rt/ivp/cart_position", type_support_->getName(), eprosima::fastdds::dds::TOPIC_QOS_DEFAULT);
   std::cout << "Turns publisher type_support name: " << type_support_->getName() << std::endl;
   if (topic_ == nullptr) {
     std::cout << "Not able to create topic"
@@ -71,22 +71,11 @@ bool TurnsPublisher::Init() {
 }
 
 bool TurnsPublisher::Publish(float turns) {
-  if (listener_.matched_ > 0) {
+  if (listener_.matched_ > 0 || true) {  // ROS2 topic echo does not create a listener match
     turns_message_.data(turns);
     data_writer_->write(&turns_message_);
     return true;
   }
+  std::cout << "Not Publishing:  " << turns << std::endl;
   return false;
-}
-
-void TurnsPublisher::Run() {
-  int Samples = 10;
-  uint32_t samples_sent = 0;
-  while (samples_sent < Samples) {
-    if (Publish(0.01f)) {
-      samples_sent++;
-      std::cout << "Message: " << turns_message_.data() << " SENT" << std::endl;
-    }
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-  }
 }

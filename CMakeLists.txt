@@ -19,6 +19,15 @@ endif ()
 add_subdirectory(simulator)
 add_subdirectory(communication)
 
+if(NOT fastcdr_FOUND)
+    message(STATUS "Not found")
+    find_package(fastcdr REQUIRED)
+endif()
+
+if(NOT fastrtps_FOUND)
+    find_package(fastrtps REQUIRED)
+endif()
+
 find_package(Qt6 COMPONENTS
         Core
         Gui

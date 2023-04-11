@@ -17,7 +17,7 @@ Simulator::~Simulator() {
 
 bool Simulator::Init() {
   thread_stop = false;
-  time_step = 1.f / 60.f;  // Only able to run 1/100 on Windows, on Linus easy able to run 1/500
+  time_step = 1.f / 50.f;  // Only able to run 1/100 on Windows, on Linus easy able to run 1/500
   time_start = std::chrono::steady_clock::now();
   time_end = time_start;
   time_elapsed_ = std::chrono::duration<float>(time_end - time_start).count();

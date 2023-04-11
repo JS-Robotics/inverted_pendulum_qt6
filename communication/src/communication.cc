@@ -11,6 +11,7 @@ Communication::Communication(Simulator &simulator) : simulator_(simulator) {
   participant_ = nullptr;
   publisher_cart_position_ = nullptr;
   publisher_pendulum_state_ = nullptr;
+  subscriber_torque_setpoint_ = nullptr;
 
   // Init messages to zero state
   message_cart_position_.data() = 0;
@@ -43,6 +44,8 @@ bool Communication::Init() {
   publisher_pendulum_state_ =
       new RosPublisher<geometry_msgs::msg::Vector3PubSubType>(participant_, "rt/ivp/pendulum_state");
   publisher_pendulum_state_->Init();
+
+  subscriber_torque_setpoint_ = new RosSubscriber<std_msgs::msg::Float32PubSubType, std_msgs::msg::Float32>(&Communication::topic_callback, participant_, "rt/ivp/torque_setpoint");
   return true;
 }
 

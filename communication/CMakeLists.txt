@@ -13,6 +13,7 @@ add_library(communication
         src/communication.cc
         src/turns_publisher.cc
         src/ros_publisher.h
+        src/ros_subscriber.h
         ${MESSAGE_SOURCES}
         )
 

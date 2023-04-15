@@ -44,8 +44,9 @@ class Communication{
   RosPublisher<geometry_msgs::msg::Vector3PubSubType>* publisher_pendulum_state_;
   geometry_msgs::msg::Vector3 message_pendulum_state;
 
-  RosSubscriber<std_msgs::msg::Float32PubSubType, std_msgs::msg::Float32>* subscriber_torque_setpoint_;
-  void topic_callback(const std_msgs::msg::Float32& msg) {
+  RosSubscriber<Communication, std_msgs::msg::Float32PubSubType, const std_msgs::msg::Float32&>* subscriber_torque_setpoint_;
+
+  void TopicCallback(const std_msgs::msg::Float32& msg) {
     std::cout << "Received value: " << msg.data() << std::endl;
   }
 

@@ -13,7 +13,6 @@
 #include <fastdds/dds/subscriber/DataReaderListener.hpp>
 #include <fastdds/dds/subscriber/qos/DataReaderQos.hpp>
 #include <fastdds/dds/subscriber/SampleInfo.hpp>
-#include "message_types/Float32/Float32PubSubTypes.h"
 
 template<class ClassRef, typename PubSub, typename MessageType>
 class RosSubscriber {

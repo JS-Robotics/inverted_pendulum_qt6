@@ -16,7 +16,7 @@
 #include "message_types/Float32/Float32PubSubTypes.h"
 
 template<class ClassRef, typename PubSub, typename MessageType>
-class RosSubscriber {
+class RosSubscriber : public eprosima::fastdds::dds::DataReaderListener {
  public:
   RosSubscriber(void (ClassRef::*callback)(MessageType),
                 eprosima::fastdds::dds::DomainParticipant *participant,
@@ -29,10 +29,10 @@ class RosSubscriber {
       topic_(nullptr),
       data_reader_(nullptr),
       type_support_(new PubSub),
-//      context_(context),
-//      callback_(callback),
-      listener_(callback, context)
-      {
+      context_(context),
+      callback_(callback)
+//      listener_(callback, context)
+  {
 
   }
 
@@ -73,7 +73,7 @@ class RosSubscriber {
     }
 
     // Create the DataReader
-    data_reader_ = subscriber_->create_datareader(topic_, eprosima::fastdds::dds::DATAREADER_QOS_DEFAULT, &listener_);
+    data_reader_ = subscriber_->create_datareader(topic_, eprosima::fastdds::dds::DATAREADER_QOS_DEFAULT, this);
 
     if (data_reader_ == nullptr) {
       return false;
@@ -90,47 +90,72 @@ class RosSubscriber {
   eprosima::fastdds::dds::Topic *topic_;
   eprosima::fastdds::dds::DataReader *data_reader_;
   eprosima::fastdds::dds::TypeSupport type_support_;
-//  void (ClassRef::*callback_)(MessageType);
-//  ClassRef *context_;
- protected:
-  class SubListener : public eprosima::fastdds::dds::DataReaderListener {
-   public:
+  void (ClassRef::*callback_)(MessageType);
+  ClassRef *context_;
+  typename PubSub::type message_;
 
-    SubListener(void (ClassRef::*callback)(MessageType), ClassRef *context) :
-        callback_(callback), context_(context) {
+  void on_subscription_matched(
+      eprosima::fastdds::dds::DataReader *,
+      const eprosima::fastdds::dds::SubscriptionMatchedStatus &info) override {
+    if (info.current_count_change == 1) {
+      std::cout << "Subscriber matched." << std::endl;
+    } else if (info.current_count_change == -1) {
+      std::cout << "Subscriber unmatched." << std::endl;
+    } else {
+      std::cout << info.current_count_change
+                << " is not a valid value for SubscriptionMatchedStatus current count change" << std::endl;
     }
+  }
 
-    ~SubListener() override {
-    }
-
-    void on_subscription_matched(
-        eprosima::fastdds::dds::DataReader *,
-        const eprosima::fastdds::dds::SubscriptionMatchedStatus &info) override {
-      if (info.current_count_change == 1) {
-        std::cout << "Subscriber matched." << std::endl;
-      } else if (info.current_count_change == -1) {
-        std::cout << "Subscriber unmatched." << std::endl;
-      } else {
-        std::cout << info.current_count_change
-                  << " is not a valid value for SubscriptionMatchedStatus current count change" << std::endl;
+  void on_data_available(
+      eprosima::fastdds::dds::DataReader *reader) override {
+    eprosima::fastdds::dds::SampleInfo info;
+    if (reader->take_next_sample(&message_, &info) == ReturnCode_t::RETCODE_OK) {
+      if (info.valid_data) {
+        (context_->*callback_)(message_);
       }
     }
+  }
 
-    void on_data_available(
-        eprosima::fastdds::dds::DataReader *reader) override {
-      eprosima::fastdds::dds::SampleInfo info;
-      if (reader->take_next_sample(&message_, &info) == ReturnCode_t::RETCODE_OK) {
-        if (info.valid_data) {
-          context_->*callback_(message_);
-        }
-      }
-    }
 
-    MessageType message_;
-    void (ClassRef::*callback_)(MessageType);
-    ClassRef* context_;
-
-  } listener_;
+//  class SubListener : public eprosima::fastdds::dds::DataReaderListener {
+//   public:
+//
+//    SubListener(void (ClassRef::*callback)(MessageType), ClassRef *context) :
+//        callback_(callback), context_(context) {
+//    }
+//
+//    ~SubListener() override {
+//    }
+//
+//    void on_subscription_matched(
+//        eprosima::fastdds::dds::DataReader *,
+//        const eprosima::fastdds::dds::SubscriptionMatchedStatus &info) override {
+//      if (info.current_count_change == 1) {
+//        std::cout << "Subscriber matched." << std::endl;
+//      } else if (info.current_count_change == -1) {
+//        std::cout << "Subscriber unmatched." << std::endl;
+//      } else {
+//        std::cout << info.current_count_change
+//                  << " is not a valid value for SubscriptionMatchedStatus current count change" << std::endl;
+//      }
+//    }
+//
+//    void on_data_available(
+//        eprosima::fastdds::dds::DataReader *reader) override {
+//      eprosima::fastdds::dds::SampleInfo info;
+//      if (reader->take_next_sample(&message_, &info) == ReturnCode_t::RETCODE_OK) {
+//        if (info.valid_data) {
+//          context_->*callback_(message_);
+//        }
+//      }
+//    }
+//
+//    MessageType message_;
+//    void (ClassRef::*callback_)(MessageType);
+//    ClassRef* context_;
+//
+//  } listener_;
 
 };
 

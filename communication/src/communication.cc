@@ -46,6 +46,7 @@ bool Communication::Init() {
   publisher_pendulum_state_->Init();
 
   subscriber_torque_setpoint_ = new RosSubscriber<Communication, std_msgs::msg::Float32PubSubType, const std_msgs::msg::Float32&>(&Communication::TopicCallback, participant_, "rt/ivp/torque_setpoint", this);
+  subscriber_torque_setpoint_->Init();
   return true;
 }
 

@@ -9,6 +9,7 @@
 Simulator::Simulator() {
   step_ = 1;  // Must start at 1 to avoid zero division.
   thread_ = nullptr;
+  torque_ = 0;
 }
 
 Simulator::~Simulator() {
@@ -124,6 +125,9 @@ void Simulator::UpdateLoopAverage(float duration) {
 
 void Simulator::UpdateSimulation() {
 
+}
+void Simulator::SetTorque(float torque) {
+  torque_ = torque;
 }
 
 

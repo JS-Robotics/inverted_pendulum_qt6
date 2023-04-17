@@ -45,8 +45,9 @@ class Communication{
   geometry_msgs::msg::Vector3 message_pendulum_state;
 
   RosSubscriber<Communication, std_msgs::msg::Float32PubSubType, const std_msgs::msg::Float32&>* subscriber_torque_setpoint_;
-
+  float torque_setpoint_;
   void TopicCallback(const std_msgs::msg::Float32& msg) {
+    torque_setpoint_ = msg.data();
     std::cout << "Received value: " << msg.data() << std::endl;
   }
 

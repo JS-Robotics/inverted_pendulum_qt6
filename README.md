@@ -13,6 +13,6 @@ This package requires
     * 6.5.0
 
 Environment variables:
-* QT_LOCAL_PATH
+* QT_INSTALL_PATH
   * Windows: add environment variable to table (i.e Add `QT_INSTALL_PATH` `C:/Qt/6.4.2`)
-  * Linux: `export QT_INSTALL_PATH` (i.e `export QT_LOCAL_PATH=$ENV{HOME}/Qt/6.4.2`) 
+  * Linux: `export QT_INSTALL_PATH` (i.e `export QT_INSTALL_PATH=$ENV{HOME}/Qt/6.4.2`) 

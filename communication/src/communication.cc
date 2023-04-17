@@ -71,6 +71,9 @@ uint32_t Communication::Run() {
     message_pendulum_state.y() = (angle-angle_old)/time_step_;
     publisher_pendulum_state_->Publish(message_pendulum_state);
     angle_old = angle;
+
+    simulator_.SetTorque(torque_setpoint_);
+
     time_end_ = std::chrono::steady_clock::now();
     float duration = std::chrono::duration<float>(time_end_ - time_start_).count();
     if (duration < time_step_) {

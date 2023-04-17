@@ -13,6 +13,7 @@ if (WIN32)
 endif ()
 
 if (UNIX)
+#    set(CMAKE_PREFIX_PATH "$ENV{QT_INSTALL_PATH}/gcc_64/lib/cmake/Qt6")
     set(CMAKE_PREFIX_PATH "$ENV{QT_INSTALL_PATH}/gcc_64/lib/cmake/Qt6")
 endif ()
 

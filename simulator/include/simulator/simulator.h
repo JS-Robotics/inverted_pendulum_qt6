@@ -24,6 +24,7 @@ class Simulator {
   void GetState(float &position, float &Angle);
   void GetStats(float &simulation_time, float &elapsed_time);
   void UpdateLoopAverage(float duration);
+  void SetTorque(float torque);
   void UpdateSimulation();
 
  private:
@@ -37,6 +38,7 @@ class Simulator {
   float time_elapsed_;
   float simulation_time_;
   float step_;
+  float torque_;
   std::thread* thread_;
 
 

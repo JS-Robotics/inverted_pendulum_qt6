@@ -49,7 +49,7 @@ uint32_t Simulator::Run() {
   float x = 0.0f;  // max: 0.42f - min: 0.42f
   float w_dd = 0;
   float w_d = 0;
-  float w = 3.14f; //1.57079632679f;
+  float w = 0.0f; //1.57079632679f;
 
   float m_p = 0.071f;
   float m_c = 0.288f;
@@ -63,7 +63,7 @@ uint32_t Simulator::Run() {
   float rail_limit = 0.42f;
   while (!thread_stop) {
     time_start = std::chrono::steady_clock::now();
-//    F_m = 0.4f*static_cast<float>(std::sin(2*time_elapsed_));
+    F_m = torque_;
 
     x_dd = (F_m - b_c * x_d - m_p * L_p * w_dd * cos(w) + m_p * L_p * w_d * w_d * sin(w)) / (m_p + m_c);
     x_d = x_dd * time_step + x_d;

@@ -34,6 +34,10 @@ class Communication{
   std::chrono::time_point<std::chrono::steady_clock> time_end_;
   std::thread* thread_;
   Simulator& simulator_;
+  float pos_filtered_;
+  float vel_filtered_;
+  float kFilterAlpha = 0.5f;
+  float kPi = 3.14159265359;
 
   eprosima::fastdds::dds::DomainParticipant* participant_;
 

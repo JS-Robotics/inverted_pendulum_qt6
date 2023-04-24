@@ -50,6 +50,7 @@ uint32_t Simulator::Run() {
   float w_dd = 0;
   float w_d = 0;
   float w = 0.0f; //1.57079632679f;
+//  float w = 1.57079632679f;
 
   float m_p = 0.071f;
   float m_c = 0.288f;
@@ -65,7 +66,7 @@ uint32_t Simulator::Run() {
     time_start = std::chrono::steady_clock::now();
     F_m = torque_;
 
-    x_dd = (F_m - b_c * x_d - m_p * L_p * w_dd * cos(w) + m_p * L_p * w_d * w_d * sin(w)) / (m_p + m_c);
+    x_dd = static_cast<float>((F_m - b_c * x_d - m_p * L_p * w_dd * cos(w) + m_p * L_p * w_d * w_d * sin(w)) / (m_p + m_c));
     x_d = x_dd * time_step + x_d;
     x = x_d * time_step + x;
 
@@ -81,7 +82,7 @@ uint32_t Simulator::Run() {
       x = -rail_limit;
     }
 
-    w_dd = (-m_p * L_p * g * sin(w) - m_p * L_p * x_dd * cos(w) - b_p * w_d) / (I_p + m_p * L_p * L_p);
+    w_dd = static_cast<float>((-m_p * L_p * g * sin(w) - m_p * L_p * x_dd * cos(w) - b_p * w_d) / (I_p + m_p * L_p * L_p));
     w_d = w_dd * time_step + w_d;
     w = w_d * time_step + w;
 
@@ -106,7 +107,8 @@ uint32_t Simulator::Run() {
 void Simulator::GetState(float &position, float &angle) {
   mutex_.lock();
   position = position_;
-  angle = angle_ * 180.f / 3.14159265359f;  // Convert to DEG
+//  angle = angle_ * 180.f / 3.14159265359f;  // Convert to DEG
+  angle = angle_;
   mutex_.unlock();
 }
 

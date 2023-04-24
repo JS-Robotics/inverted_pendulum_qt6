@@ -71,7 +71,6 @@ uint32_t Communication::Run() {
     simulator_.GetState(position, angle);
 
     // Run velocity filter
-    angle = angle * 3.14159265359f / 180.f; // Convert to rad
     vel_filtered_ = kFilterAlpha * (angle - angle_old) / time_step_ + ((1 - kFilterAlpha) * vel_filtered_);
     angle_old = angle;
 

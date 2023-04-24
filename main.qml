@@ -23,8 +23,8 @@ Window {
 
     Connections {
         target: backend
-        onAngleChanged: angle = backend.getAngle()
-        onPosChanged: pos = backend.getPos()
+        onAngleChanged: angle = backend.getAngle()   // Angle is received in rad
+        onPosChanged: pos = backend.getPos()        // Position is received in meters
         onSimChanged: sim = backend.getSim()
         onElapsedChanged: elapsed = backend.getElapsed()
     }
@@ -87,7 +87,8 @@ Window {
 
                     Model {
                         id: pendulumModel
-                        eulerRotation.z: angle
+
+                        eulerRotation.z: angle * (57.2957795131)
                         materials: [black_material, white_material]
                         position: Qt.vector3d(0, 0, 0)
                         source: "imports/meshes/pendulum.mesh"
@@ -106,7 +107,7 @@ Window {
         Text {
             id: angle_text
             color: "#ffffff"
-            text: "Angle:      " + (angle*0.01745329251).toFixed(2) + "[rad]"
+            text: "Angle:      " + (angle).toFixed(2) + "[rad]"
             font.pixelSize: 26
             font.styleName: "Regular"
             font.weight: Font.Normal

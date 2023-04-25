@@ -32,12 +32,14 @@ class Communication{
   float time_step_;
   std::chrono::time_point<std::chrono::steady_clock> time_start_;
   std::chrono::time_point<std::chrono::steady_clock> time_end_;
+  std::chrono::time_point<std::chrono::steady_clock> heart_beat_;
   std::thread* thread_;
   Simulator& simulator_;
   float pos_filtered_;
   float vel_filtered_;
   float kFilterAlpha = 0.5f;
   float kPi = 3.14159265359;
+  float kHearBeatTimeout = 0.1; // 100[ms]
 
   eprosima::fastdds::dds::DomainParticipant* participant_;
 
@@ -51,8 +53,9 @@ class Communication{
   RosSubscriber<Communication, std_msgs::msg::Float32PubSubType, const std_msgs::msg::Float32&>* subscriber_torque_setpoint_;
   float torque_setpoint_;
   void TopicCallback(const std_msgs::msg::Float32& msg) {
+    heart_beat_ =  std::chrono::steady_clock::now();
     torque_setpoint_ = msg.data();
-    std::cout << "Received value: " << msg.data() << std::endl;
+//    std::cout << "Received value: " << msg.data() << std::endl;
   }
 
   void CleanDds();

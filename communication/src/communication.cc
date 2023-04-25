@@ -8,6 +8,7 @@ Communication::Communication(Simulator &simulator) : simulator_(simulator) {
   pos_filtered_ = 0.0f;
   vel_filtered_ = 0.0f;
   time_step_ = 0.0f;
+  torque_setpoint_ = 0.0f;
   thread_ = nullptr;
   thread_stop = false;
   participant_ = nullptr;
@@ -33,6 +34,7 @@ bool Communication::Init() {
   time_step_ = 0.01f; // 10[ms]
   time_start_ = std::chrono::steady_clock::now();
   time_end_ = time_start_;
+  heart_beat_ = time_start_;
 
   eprosima::fastdds::dds::DomainParticipantQos turns_qos;
   turns_qos.name("pendulum_simulator_participant");
@@ -90,7 +92,11 @@ uint32_t Communication::Run() {
     publisher_pendulum_state_->Publish(message_pendulum_state);
 
     // Set torque from subscription
-    simulator_.SetTorque(torque_setpoint_);
+    if (std::chrono::duration<float>(time_start_ - heart_beat_).count() > kHearBeatTimeout) {
+      simulator_.SetTorque(0.0f);
+    } else {
+      simulator_.SetTorque(torque_setpoint_);
+    }
 
     time_end_ = std::chrono::steady_clock::now();
     float duration = std::chrono::duration<float>(time_end_ - time_start_).count();

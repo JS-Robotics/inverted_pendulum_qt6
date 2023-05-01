@@ -31,7 +31,7 @@ Communication::~Communication() {
 
 bool Communication::Init() {
   thread_stop = false;
-  time_step_ = 0.01f; // 10[ms]
+  time_step_ = 0.02f; // 10[ms]
   time_start_ = std::chrono::steady_clock::now();
   time_end_ = time_start_;
   heart_beat_ = time_start_;
@@ -67,19 +67,26 @@ uint32_t Communication::Run() {
   float position = 0;
   float angle = 0;
   float angle_old = 0;
+  float delta_theta;
 
   while (!thread_stop) {
     time_start_ = std::chrono::steady_clock::now();
     simulator_.GetState(position, angle);
 
-    // Run velocity filter
-    vel_filtered_ = kFilterAlpha * (angle - angle_old) / time_step_ + ((1 - kFilterAlpha) * vel_filtered_);
+    delta_theta = angle - angle_old;
+
+    // Turnover overflow check
+    if (delta_theta > 1.65 * kPi) {
+      delta_theta = (angle - 2 * kPi) - angle_old;
+      std::cout << delta_theta << std::endl;
+    } else if (delta_theta < -1.65 * kPi) {
+      delta_theta = (angle + 2 * kPi) - angle_old;
+      std::cout << delta_theta << std::endl;
+    }
+
+    vel_filtered_ = kFilterAlpha * (delta_theta) / time_step_ + ((1 - kFilterAlpha) * vel_filtered_);
     angle_old = angle;
 
-    // Run position filter
-    if (angle < 0.0f) {
-      angle = 2 * kPi + angle;
-    }
     pos_filtered_ = kFilterAlpha * angle + ((1 - kFilterAlpha) * pos_filtered_);
 
     // Publish cart position

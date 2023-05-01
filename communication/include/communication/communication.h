@@ -39,7 +39,7 @@ class Communication{
   float vel_filtered_;
   float kFilterAlpha = 0.5f;
   float kPi = 3.14159265359;
-  float kHearBeatTimeout = 0.1; // 100[ms]
+  float kHearBeatTimeout = 0.1f; // 100[ms]
 
   eprosima::fastdds::dds::DomainParticipant* participant_;
 

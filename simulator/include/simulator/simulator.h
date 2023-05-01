@@ -41,6 +41,8 @@ class Simulator {
   float torque_;
   std::thread* thread_;
 
+  float kPi = 3.14159265359f;
+
 
 };
 

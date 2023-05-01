@@ -49,7 +49,7 @@ uint32_t Simulator::Run() {
   float x = 0.0f;  // max: 0.42f - min: 0.42f
   float w_dd = 0;
   float w_d = 0;
-  float w = 0.0f; //1.57079632679f;
+  float w = 3.17f; //1.57079632679f;
 //  float w = 1.57079632679f;
 
   float m_p = 0.071f;
@@ -57,16 +57,22 @@ uint32_t Simulator::Run() {
   float L_p = (0.685f - 0.246f);
   float I_p = 0.00466;
   float g = 9.81f;
-  float F_m = 0;
+  double F_m = 0;
   float b_c = 0.095f;
 //  float b_c = 0.545f;
   float b_p = 0.00112297f;
   float rail_limit = 0.42f;
   while (!thread_stop) {
     time_start = std::chrono::steady_clock::now();
-    F_m = torque_;
+    if (std::abs(x_d) > 0.0001f) {
+      F_m = torque_
+          - (0.015 / 0.019184) * std::tanh(50 * x_d);  // 0.015[Nm] is motor friction, 0.019184[m] effective diameter
+    } else {
+      F_m = torque_;
+    }
 
-    x_dd = static_cast<float>((F_m - b_c * x_d - m_p * L_p * w_dd * cos(w) + m_p * L_p * w_d * w_d * sin(w)) / (m_p + m_c));
+    x_dd = static_cast<float>((F_m - b_c * x_d - m_p * L_p * w_dd * cos(w) + m_p * L_p * w_d * w_d * sin(w))
+        / (m_p + m_c));
     x_d = x_dd * time_step + x_d;
     x = x_d * time_step + x;
 
@@ -82,9 +88,21 @@ uint32_t Simulator::Run() {
       x = -rail_limit;
     }
 
-    w_dd = static_cast<float>((-m_p * L_p * g * sin(w) - m_p * L_p * x_dd * cos(w) - b_p * w_d) / (I_p + m_p * L_p * L_p));
+    w_dd =
+        static_cast<float>((-m_p * L_p * g * sin(w) - m_p * L_p * x_dd * cos(w) - b_p * w_d) / (I_p + m_p * L_p * L_p));
+
     w_d = w_dd * time_step + w_d;
+    // Overflow check
+
+
     w = w_d * time_step + w;
+    // Mapping angle to: 0<=angle<=2pi
+    if (w < 0) {
+      w = 2 * kPi - w;
+    }
+    else if (w > 2 * kPi) {
+      w = w - 2 * kPi;
+    }
 
     //UpdateSimulation();
 

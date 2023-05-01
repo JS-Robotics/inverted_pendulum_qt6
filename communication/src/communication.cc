@@ -31,7 +31,7 @@ Communication::~Communication() {
 
 bool Communication::Init() {
   thread_stop = false;
-  time_step_ = 0.02f; // 10[ms]
+  time_step_ = 0.02f; // 20[ms]
   time_start_ = std::chrono::steady_clock::now();
   time_end_ = time_start_;
   heart_beat_ = time_start_;
@@ -74,14 +74,11 @@ uint32_t Communication::Run() {
     simulator_.GetState(position, angle);
 
     delta_theta = angle - angle_old;
-
-    // Turnover overflow check
+    // Turnover overflow check. Check if overflow is over the threshold 1.65
     if (delta_theta > 1.65 * kPi) {
       delta_theta = (angle - 2 * kPi) - angle_old;
-      std::cout << delta_theta << std::endl;
     } else if (delta_theta < -1.65 * kPi) {
       delta_theta = (angle + 2 * kPi) - angle_old;
-      std::cout << delta_theta << std::endl;
     }
 
     vel_filtered_ = kFilterAlpha * (delta_theta) / time_step_ + ((1 - kFilterAlpha) * vel_filtered_);

@@ -10,6 +10,7 @@ Simulator::Simulator() {
   step_ = 1;  // Must start at 1 to avoid zero division.
   thread_ = nullptr;
   torque_ = 0;
+  reset_simulation_ = false;
 }
 
 Simulator::~Simulator() {
@@ -49,7 +50,7 @@ uint32_t Simulator::Run() {
   float x = 0.0f;  // max: 0.42f - min: 0.42f
   float w_dd = 0;
   float w_d = 0;
-  float w = 3.17f; //1.57079632679f;
+  float w = 0.0f; //1.57079632679f;
 //  float w = 1.57079632679f;
 
   float m_p = 0.071f;
@@ -99,8 +100,7 @@ uint32_t Simulator::Run() {
     // Mapping angle to: 0<=angle<=2pi
     if (w < 0) {
       w = 2 * kPi - w;
-    }
-    else if (w > 2 * kPi) {
+    } else if (w > 2 * kPi) {
       w = w - 2 * kPi;
     }
 
@@ -117,6 +117,15 @@ uint32_t Simulator::Run() {
     UpdateLoopAverage(duration);
     if (duration < time_step) {
       std::this_thread::sleep_for(std::chrono::duration<float>(time_step - duration));
+    }
+    if (reset_simulation_) {
+      w = 0;
+      w_d = 0;
+      w_dd = 0;
+      x = 0;
+      x_d = 0;
+      x_dd = 0;
+      reset_simulation_ = false;
     }
   }
   return 0;
@@ -146,8 +155,13 @@ void Simulator::UpdateLoopAverage(float duration) {
 void Simulator::UpdateSimulation() {
 
 }
+
 void Simulator::SetTorque(float torque) {
   torque_ = torque;
+}
+
+void Simulator::ResetSimulation() {
+  reset_simulation_ = true;
 }
 
 

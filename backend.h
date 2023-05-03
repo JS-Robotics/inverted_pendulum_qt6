@@ -51,6 +51,9 @@ class BackEnd : public QObject {
   void angleChanged();
   void elapsedChanged();
 
+ public slots:
+  void handleButtonReset();
+
  private:
   float pos_;
   float angle_;

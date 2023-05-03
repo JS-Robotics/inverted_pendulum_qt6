@@ -63,3 +63,7 @@ void BackEnd::stop() {
   }
 
 }
+void BackEnd::handleButtonReset() {
+  qDebug() << "Reset Simulation pressed";
+  simulator_->ResetSimulation();
+}

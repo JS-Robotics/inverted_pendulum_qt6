@@ -26,6 +26,7 @@ class Simulator {
   void UpdateLoopAverage(float duration);
   void SetTorque(float torque);
   void UpdateSimulation();
+  void ResetSimulation();
 
  private:
   bool thread_stop;
@@ -40,7 +41,7 @@ class Simulator {
   float step_;
   float torque_;
   std::thread* thread_;
-
+  bool reset_simulation_;
   float kPi = 3.14159265359f;
 
 

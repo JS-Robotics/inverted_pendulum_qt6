@@ -3,6 +3,7 @@ import QtQuick
 import QtQuick3D
 
 //! [import]
+import QtQuick.Controls 6.3
 Window {
     id: window
 
@@ -23,9 +24,13 @@ Window {
 
     Connections {
         target: backend
+        // @disable-check M16
         onAngleChanged: angle = backend.getAngle()   // Angle is received in rad
+        // @disable-check M16
         onPosChanged: pos = backend.getPos()        // Position is received in meters
+        // @disable-check M16
         onSimChanged: sim = backend.getSim()
+        // @disable-check M16
         onElapsedChanged: elapsed = backend.getElapsed()
     }
     Item {
@@ -97,6 +102,14 @@ Window {
             }
         }
     }
+    Button {
+        id: button_reset
+        x: 1144
+        y: 646
+        text: qsTr("Reset")
+        onClicked: backend.handleButtonReset()
+    }
+
     Column {
         id: column
         height: 400
@@ -154,4 +167,5 @@ Window {
             width: 200
         }
     }
+
 }

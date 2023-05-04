@@ -67,7 +67,7 @@ uint32_t Simulator::Run() {
     time_start = std::chrono::steady_clock::now();
     if (std::abs(x_d) > 0.0001f) {
       F_m = torque_
-          - (0.015 / 0.019184) * std::tanh(50 * x_d);  // 0.015[Nm] is motor friction, 0.019184[m] effective diameter
+          - 2*(0.015 / 0.019184) * std::tanh(50 * x_d);  // 0.015[Nm] is motor friction, 0.019184[m] effective diameter
     } else {
       F_m = torque_;
     }

@@ -11,6 +11,9 @@ Simulator::Simulator() {
   thread_ = nullptr;
   torque_ = 0;
   reset_simulation_ = false;
+  position_ = 0;
+  velocity_ = 0;
+  angle_= 0;
 }
 
 Simulator::~Simulator() {
@@ -108,6 +111,7 @@ uint32_t Simulator::Run() {
 
     mutex_.lock();
     position_ = x;
+    velocity_ = x_d;
     angle_ = w;
     mutex_.unlock();
 
@@ -131,9 +135,10 @@ uint32_t Simulator::Run() {
   return 0;
 }
 
-void Simulator::GetState(float &position, float &angle) {
+void Simulator::GetState(float &position, float &velocity, float &angle) {
   mutex_.lock();
   position = position_;
+  velocity = velocity_;
 //  angle = angle_ * 180.f / 3.14159265359f;  // Convert to DEG
   angle = angle_;
   mutex_.unlock();

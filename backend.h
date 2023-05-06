@@ -56,6 +56,7 @@ class BackEnd : public QObject {
 
  private:
   float pos_;
+  float vel_; // linear velocity
   float angle_;
   float sim_time_;
   float elapsed_time_;

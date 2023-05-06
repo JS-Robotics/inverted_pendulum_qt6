@@ -21,7 +21,7 @@ class Simulator {
   uint32_t Run();
   void Stop();
 
-  void GetState(float &position, float &Angle);
+  void GetState(float &position, float &velocity, float &Angle);
   void GetStats(float &simulation_time, float &elapsed_time);
   void UpdateLoopAverage(float duration);
   void SetTorque(float torque);
@@ -32,6 +32,7 @@ class Simulator {
   bool thread_stop;
   std::mutex mutex_;
   float position_;
+  float velocity_;
   float angle_;
   float time_step;
   std::chrono::time_point<std::chrono::steady_clock> time_start;

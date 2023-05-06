@@ -12,12 +12,14 @@ Communication::Communication(Simulator &simulator) : simulator_(simulator) {
   thread_ = nullptr;
   thread_stop = false;
   participant_ = nullptr;
-  publisher_cart_position_ = nullptr;
+  publisher_cart_state_ = nullptr;
   publisher_pendulum_state_ = nullptr;
   subscriber_torque_setpoint_ = nullptr;
 
   // Init messages to zero state
-  message_cart_position_.data() = 0;
+  message_cart_state_.x() = 0.0;
+  message_cart_state_.y() = 0.0;
+  message_cart_state_.z() = 0.0;
   message_pendulum_state.x() = 0.0;
   message_pendulum_state.y() = 0.0;
   message_pendulum_state.z() = 0.0;
@@ -42,8 +44,8 @@ bool Communication::Init() {
   participant_ =
       eprosima::fastdds::dds::DomainParticipantFactory::get_instance()->create_participant(domain_id, turns_qos);
 
-  publisher_cart_position_ = new RosPublisher<std_msgs::msg::Float32PubSubType>(participant_, "rt/ivp/cart_position");
-  publisher_cart_position_->Init();
+  publisher_cart_state_ = new RosPublisher<geometry_msgs::msg::Vector3PubSubType>(participant_, "rt/ivp/cart_state");
+  publisher_cart_state_->Init();
 
   publisher_pendulum_state_ =
       new RosPublisher<geometry_msgs::msg::Vector3PubSubType>(participant_, "rt/ivp/pendulum_state");
@@ -65,13 +67,14 @@ void Communication::Start() {
 
 uint32_t Communication::Run() {
   float position = 0;
+  float velocity = 0;
   float angle = 0;
   float angle_old = 0;
   float delta_theta;
 
   while (!thread_stop) {
     time_start_ = std::chrono::steady_clock::now();
-    simulator_.GetState(position, angle);
+    simulator_.GetState(position, velocity, angle);
 
     delta_theta = angle - angle_old;
     // Turnover overflow check. Check if overflow is over the threshold 1.65
@@ -87,8 +90,9 @@ uint32_t Communication::Run() {
     pos_filtered_ = kFilterAlpha * angle + ((1 - kFilterAlpha) * pos_filtered_);
 
     // Publish cart position
-    message_cart_position_.data() = position;
-    publisher_cart_position_->Publish(message_cart_position_);
+    message_cart_state_.x() = position;
+    message_cart_state_.y() = velocity;
+    publisher_cart_state_->Publish(message_cart_state_);
 
     // Publish pendulum state
     message_pendulum_state.x() = pos_filtered_;
@@ -129,9 +133,9 @@ void Communication::Stop() {
 
 void Communication::CleanDds() {
 
-  if (publisher_cart_position_ != nullptr) {
-    delete publisher_cart_position_;
-    publisher_cart_position_ = nullptr;
+  if (publisher_cart_state_ != nullptr) {
+    delete publisher_cart_state_;
+    publisher_cart_state_ = nullptr;
   }
 
   if (publisher_pendulum_state_ != nullptr) {

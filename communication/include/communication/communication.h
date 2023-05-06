@@ -44,8 +44,8 @@ class Communication{
   eprosima::fastdds::dds::DomainParticipant* participant_;
 
 
-  RosPublisher<std_msgs::msg::Float32PubSubType>* publisher_cart_position_;
-  std_msgs::msg::Float32 message_cart_position_;
+  RosPublisher<geometry_msgs::msg::Vector3PubSubType>* publisher_cart_state_;
+  geometry_msgs::msg::Vector3 message_cart_state_;
 
   RosPublisher<geometry_msgs::msg::Vector3PubSubType>* publisher_pendulum_state_;
   geometry_msgs::msg::Vector3 message_pendulum_state;

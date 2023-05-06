@@ -7,6 +7,7 @@
 BackEnd::BackEnd(QObject *parent) : QObject(parent) {
   timer_ = 0.0f;
   pos_ = 0.0f;
+  vel_ = 0.0f;
   angle_ = 0.0f;
   sim_time_ = 0.0f;
   elapsed_time_ = 0.0f;
@@ -31,7 +32,7 @@ BackEnd::~BackEnd() {
 }
 
 void BackEnd::getPose() { // Called at Qtimer q_timer_'s interval
-  simulator_->GetState(pos_, angle_);
+  simulator_->GetState(pos_, vel_, angle_);
   simulator_->GetStats(sim_time_, elapsed_time_);
   sim_time_ = 1000000 * sim_time_;
   emit simChanged();

@@ -53,7 +53,7 @@ uint32_t Simulator::Run() {
   float x = 0.0f;  // max: 0.42f - min: 0.42f
   float w_dd = 0;
   float w_d = 0;
-  float w = 0.0f; //1.57079632679f;
+  float w = 3.1415f; //1.57079632679f;
 //  float w = 1.57079632679f;
 
   float m_p = 0.071f;
@@ -103,7 +103,7 @@ uint32_t Simulator::Run() {
     // Mapping angle to: 0<=angle<=2pi
     if (w < 0) {
       w = 2 * kPi - w;
-    } else if (w > 2 * kPi) {
+    } else if (w > 2.0 * kPi) {
       w = w - 2 * kPi;
     }
 
@@ -123,7 +123,7 @@ uint32_t Simulator::Run() {
       std::this_thread::sleep_for(std::chrono::duration<float>(time_step - duration));
     }
     if (reset_simulation_) {
-      w = 0;
+      w = 3.1415;
       w_d = 0;
       w_dd = 0;
       x = 0;

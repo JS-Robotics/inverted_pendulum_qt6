@@ -92,11 +92,13 @@ uint32_t Communication::Run() {
     // Publish cart position
     message_cart_state_.x() = position;
     message_cart_state_.y() = velocity;
+    message_cart_state_.z() = position;  // "Raw" measured position equivalent
     publisher_cart_state_->Publish(message_cart_state_);
 
     // Publish pendulum state
     message_pendulum_state.x() = pos_filtered_;
     message_pendulum_state.y() = vel_filtered_;
+    message_pendulum_state.z() = angle; // "Raw" measured angle equivalent
     publisher_pendulum_state_->Publish(message_pendulum_state);
 
     // Set torque from subscription
